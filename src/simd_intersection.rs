@@ -1,7 +1,6 @@
 /// https://github.com/pkumod/GraphSetIntersection/blob/master/src/intersection_algos.cpp
 /// Han S, Zou L, Yu J X. Speeding up set intersections in graph algorithms using simd instructions[C]
 /// Proceedings of the 2018 International Conference on Management of Data. 2018: 1587-1602.
-
 use crate::intersect::{intersect_scalar_gallop, intersect_scalar_merge};
 
 #[cxx::bridge]
@@ -86,7 +85,7 @@ pub fn intersect_simd_gallop(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec<
 }
 
 #[inline(always)]
-pub fn intersect_simd_qfilter(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec32<u32>>) -> usize {
+pub fn intersect_simd_qfilter(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec<u32>>) -> usize {
     if aaa.len() < 4 {
         return intersect_scalar_merge(aaa, bbb, results);
     }
