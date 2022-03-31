@@ -9,7 +9,6 @@ simd = ["cxx"]
 
 [dependencies]
 cxx = { version = "1.0.65", optional = true }
-mediumvec = { git = "https://github.com/zhengyi-yang/mediumvec.git" }
 lazy_static = "1.4.0"
 
 [build-dependencies]

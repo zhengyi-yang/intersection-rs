@@ -3,8 +3,6 @@ use std::cmp::Ordering;
 use std::env;
 use std::mem;
 
-use mediumvec::Vec32;
-
 #[cfg(feature = "simd")]
 use crate::simd_intersection::{intersect_simd_gallop, intersect_simd_qfilter};
 
@@ -17,16 +15,16 @@ lazy_static! {
 }
 
 #[inline(always)]
-pub fn intersect_multi(mut to_intersect: Vec<Cow<[u32]>>) -> Vec32<u32> {
+pub fn intersect_multi(mut to_intersect: Vec<Cow<[u32]>>) -> Vec<u32> {
     if to_intersect.len() == 1 {
         return to_intersect[0].iter().copied().collect();
     }
 
     to_intersect.sort_unstable_by_key(|x| x.len());
 
-    let mut intersected = Vec32::with_capacity(to_intersect[0].len() as u32);
+    let mut intersected = Vec::with_capacity(to_intersect[0].len());
     intersect(&to_intersect[0], &to_intersect[1], Some(&mut intersected));
-    let mut buffer = Vec32::with_capacity(intersected.len() as u32);
+    let mut buffer = Vec::with_capacity(intersected.len());
 
     let mut count;
 
@@ -34,7 +32,7 @@ pub fn intersect_multi(mut to_intersect: Vec<Cow<[u32]>>) -> Vec32<u32> {
         count = intersect(&intersected, &candidates, Some(&mut buffer));
 
         if count == 0 {
-            return Vec32::new();
+            return buffer;
         }
 
         mem::swap(&mut intersected, &mut buffer);
@@ -45,7 +43,7 @@ pub fn intersect_multi(mut to_intersect: Vec<Cow<[u32]>>) -> Vec32<u32> {
 }
 
 #[inline(always)]
-pub fn intersect(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec32<u32>>) -> usize {
+pub fn intersect(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec<u32>>) -> usize {
     if aaa.len() < bbb.len() / *GALLOP_OVERHEAD {
         #[cfg(feature = "simd")]
         {
@@ -71,7 +69,7 @@ pub fn intersect(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec32<u32>>) -> 
 pub fn intersect_scalar_merge<T: Copy + Ord>(
     aaa: &[T],
     mut bbb: &[T],
-    mut results: Option<&mut Vec32<T>>,
+    mut results: Option<&mut Vec<T>>,
 ) -> usize {
     let mut count = 0;
 
@@ -94,7 +92,7 @@ pub fn intersect_scalar_merge<T: Copy + Ord>(
 pub fn intersect_scalar_gallop<T: Copy + Ord>(
     aaa: &[T],
     mut bbb: &[T],
-    mut results: Option<&mut Vec32<T>>,
+    mut results: Option<&mut Vec<T>>,
 ) -> usize {
     let mut count = 0;
 
@@ -186,7 +184,6 @@ pub fn gallop_gt<'a, T: Ord>(slice: &'a [T], key: &T) -> &'a [T] {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mediumvec::vec32;
     use std::borrow::Cow;
 
     #[test]
@@ -226,6 +223,6 @@ mod tests {
 
         let intersection = intersect_multi(data);
 
-        assert_eq!(intersection, vec32![1, 3, 5, 10, 11]);
+        assert_eq!(intersection, vec![1, 3, 5, 10, 11]);
     }
 }

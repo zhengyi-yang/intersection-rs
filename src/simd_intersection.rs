@@ -48,13 +48,13 @@ mod ffi {
 }
 
 #[inline(always)]
-pub fn intersect_simd_gallop(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec32<u32>>) -> usize {
+pub fn intersect_simd_gallop(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec<u32>>) -> usize {
     if aaa.len() < 4 {
         return intersect_scalar_gallop(aaa, bbb, results);
     }
 
     if let Some(vec) = results {
-        vec.reserve_exact(aaa.len() as u32);
+        vec.reserve_exact(aaa.len());
 
         let count = unsafe {
             ffi::intersect_simdgalloping_uint(
@@ -68,7 +68,7 @@ pub fn intersect_simd_gallop(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec3
         };
 
         unsafe {
-            vec.resize(count as u32);
+            vec.set_len(count);
         }
 
         count
@@ -107,7 +107,7 @@ pub fn intersect_simd_qfilter(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec
         };
 
         unsafe {
-            vec.resize(count as u32);
+            vec.set_len(count);
         }
 
         count
