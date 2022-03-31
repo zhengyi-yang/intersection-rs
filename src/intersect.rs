@@ -24,11 +24,13 @@ pub fn intersect_multi(mut to_intersect: Vec<Cow<[u32]>>) -> Vec32<u32> {
 
     to_intersect.sort_unstable_by_key(|x| x.len());
 
-    let mut intersected: Vec32<_> = to_intersect[0].iter().copied().collect();
+    let mut intersected = Vec32::with_capacity(to_intersect[0].len() as u32);
+    intersect(&to_intersect[0], &to_intersect[1], Some(&mut intersected));
     let mut buffer = Vec32::with_capacity(intersected.len() as u32);
+
     let mut count;
 
-    for candidates in to_intersect.into_iter().skip(1) {
+    for candidates in to_intersect.into_iter().skip(2) {
         count = intersect(&intersected, &candidates, Some(&mut buffer));
 
         if count == 0 {
