@@ -54,7 +54,7 @@ pub fn intersect_simd_gallop(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec3
     }
 
     if let Some(vec) = results {
-        vec.reserve(aaa.len() as u32);
+        vec.reserve_exact(aaa.len() as u32);
 
         let count = unsafe {
             ffi::intersect_simdgalloping_uint(
@@ -93,7 +93,7 @@ pub fn intersect_simd_qfilter(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec
     }
 
     if let Some(vec) = results {
-        vec.reserve(aaa.len() as u32);
+        vec.reserve_exact(aaa.len() as u32);
 
         let count = unsafe {
             ffi::intersect_qfilter_uint_b4(
