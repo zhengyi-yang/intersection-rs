@@ -1,7 +1,6 @@
 /// https://github.com/pkumod/GraphSetIntersection/blob/master/src/intersection_algos.cpp
 /// Han S, Zou L, Yu J X. Speeding up set intersections in graph algorithms using simd instructions[C]
 /// Proceedings of the 2018 International Conference on Management of Data. 2018: 1587-1602.
-use mediumvec::Vec32;
 
 use crate::intersect::{intersect_scalar_gallop, intersect_scalar_merge};
 
