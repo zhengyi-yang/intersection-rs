@@ -91,7 +91,7 @@ pub fn intersect_simd_qfilter(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec
     }
 
     if let Some(vec) = results {
-        vec.reserve_exact(aaa.len() as u32);
+        vec.reserve_exact(aaa.len());
 
         let count = unsafe {
             ffi::intersect_qfilter_uint_b4(
@@ -110,7 +110,6 @@ pub fn intersect_simd_qfilter(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec
 
         count
     } else {
-        // let mut buf = Vec::with_capacity(aaa.len());
         unsafe {
             ffi::intersect_qfilter_uint_b4(
                 aaa.as_ptr(),
@@ -127,31 +126,30 @@ pub fn intersect_simd_qfilter(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mediumvec::vec32;
 
     #[test]
     fn test_simd() {
         let x = vec![1, 2];
         let y = vec![1, 2, 6];
-        let mut result = Vec32::new();
+        let mut result = Vec::new();
         assert_eq!(intersect_simd_gallop(&x, &y, Some(&mut result)), 2);
-        assert_eq!(result, vec32![1, 2]);
-        let mut result = Vec32::new();
+        assert_eq!(result, vec![1, 2]);
+        let mut result = Vec::new();
         assert_eq!(intersect_simd_qfilter(&x, &y, Some(&mut result)), 2);
         assert_eq!(result, vec32![1, 2]);
 
         let x = vec![1, 2, 3, 4];
         let y = vec![1, 2, 5, 6];
-        let mut result = Vec32::new();
+        let mut result = Vec::new();
         assert_eq!(intersect_simd_gallop(&x, &y, Some(&mut result)), 2);
-        assert_eq!(result, vec32![1, 2]);
-        let mut result = Vec32::new();
+        assert_eq!(result, vec![1, 2]);
+        let mut result = Vec::new();
         assert_eq!(intersect_simd_qfilter(&x, &y, Some(&mut result)), 2);
-        assert_eq!(result, vec32![1, 2]);
+        assert_eq!(result, vec![1, 2]);
 
         let x = vec![1, 2, 3, 4, 8, 9, 3_000_000_000];
         let y = vec![1, 2, 3, 4, 5, 6, 7, 3_000_000_000];
-        let mut result = Vec32::new();
+        let mut result = Vec::new();
         assert_eq!(intersect_simd_gallop(&x, &y, Some(&mut result)), 5);
         assert_eq!(result, vec32![1, 2, 3, 4, 3_000_000_000]);
         let mut result = Vec32::new();
