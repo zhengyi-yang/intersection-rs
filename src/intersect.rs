@@ -17,7 +17,7 @@ lazy_static! {
 }
 
 #[inline(always)]
-pub fn intersect_multi(mut to_intersect: Vec32<Cow<[u32]>>) -> Vec32<u32> {
+pub fn intersect_multi(mut to_intersect: Vec<Cow<[u32]>>) -> Vec32<u32> {
     if to_intersect.len() == 1 {
         return to_intersect[0].iter().copied().collect();
     }
@@ -220,7 +220,7 @@ mod tests {
         let v1 = vec![0, 1, 2, 3, 5, 10, 11, 20, 30];
         let v2 = vec![1, 3, 5, 10, 11, 70];
 
-        let data = vec32![Cow::from(&v1), Cow::from(&v2),];
+        let data = vec![Cow::from(&v1), Cow::from(&v2)];
 
         let intersection = intersect_multi(data);
 
