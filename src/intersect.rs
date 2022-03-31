@@ -215,14 +215,12 @@ mod tests {
 
     #[test]
     fn test_intersect_multi() {
-        println!("running test_intersect_multi");
-        let v1 = vec![0, 1, 2, 3, 5, 10, 11, 20, 30];
-        let v2 = vec![1, 3, 5, 10, 11, 70];
+        let data = vec![
+            Cow::from(vec![0, 1, 2, 3, 5, 10, 11, 20, 30]),
+            Cow::from(vec![1, 3, 5, 10, 11, 70]),
+            Cow::from(vec![1, 2, 3, 5, 7, 10, 11, 90]),
+        ];
 
-        let data = vec![Cow::from(&v1), Cow::from(&v2)];
-
-        let intersection = intersect_multi(data);
-
-        assert_eq!(intersection, vec![1, 3, 5, 10, 11]);
+        assert_eq!(intersect_multi(data), vec![1, 3, 5, 10, 11])
     }
 }
