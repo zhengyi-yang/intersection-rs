@@ -152,7 +152,7 @@ mod tests {
         let mut result = Vec::new();
         assert_eq!(intersect_simd_gallop(&x, &y, Some(&mut result)), 5);
         assert_eq!(result, vec![1, 2, 3, 4, 3_000_000_000]);
-        let mut result = Vec32::new();
+        let mut result = Vec::new();
         assert_eq!(intersect_simd_qfilter(&x, &y, Some(&mut result)), 5);
         assert_eq!(result, vec![1, 2, 3, 4, 3_000_000_000]);
     }
