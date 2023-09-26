@@ -6,6 +6,9 @@ use std::mem;
 #[cfg(feature = "simd")]
 use crate::simd_intersection::{intersect_simd_gallop, intersect_simd_qfilter};
 
+#[cfg(feature = "simd_new")]
+use crate::simd_intersection_new::{intersect_simd_gallop, intersect_simd_qfilter};
+
 const INTERSECTION_GALLOP_OVERHEAD: usize = 4;
 
 lazy_static! {
@@ -45,20 +48,20 @@ pub fn intersect_multi(mut to_intersect: Vec<Cow<[u32]>>) -> Vec<u32> {
 #[inline(always)]
 pub fn intersect(aaa: &[u32], bbb: &[u32], results: Option<&mut Vec<u32>>) -> usize {
     if aaa.len() < bbb.len() / *GALLOP_OVERHEAD {
-        #[cfg(feature = "simd")]
+        #[cfg(any(feature = "simd", feature = "simd_new"))]
         {
             intersect_simd_gallop(aaa, bbb, results)
         }
-        #[cfg(not(feature = "simd"))]
+        #[cfg(not(any(feature = "simd", feature = "simd_new")))]
         {
             intersect_scalar_gallop(aaa, bbb, results)
         }
     } else {
-        #[cfg(feature = "simd")]
+        #[cfg(any(feature = "simd", feature = "simd_new"))]
         {
             intersect_simd_qfilter(aaa, bbb, results)
         }
-        #[cfg(not(feature = "simd"))]
+        #[cfg(not(any(feature = "simd", feature = "simd_new")))]
         {
             intersect_scalar_merge(aaa, bbb, results)
         }

@@ -6,10 +6,12 @@ edition = "2021"
 
 [features]
 simd = ["cxx"]
+simd_new = ["setops"]
 
 [dependencies]
-cxx = { version = "1.0.65", optional = true }
+cxx = { version = "1.0.83", optional = true }
+setops = {git = "https://github.com/UNSW-database/simd_set_operations", optional = true}
 lazy_static = "1.4.0"
 
 [build-dependencies]
-cxx-build = "1.0.65"
+cxx-build = "1.0.83"
